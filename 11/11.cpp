@@ -9,6 +9,9 @@
 
 #include "pipeline.h"
 
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 768
+
 GLuint VBO;
 GLuint IBO;
 GLuint gWorldLocation;
@@ -52,6 +55,8 @@ static void RenderSceneCB()
     p.Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
     p.WorldPos(sinf(Scale), 0.0f, 0.0f);
     p.Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
+    p.SetPerspectiveProj(30.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 1000.0f);
+
 
     glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, (const GLfloat*)p.GetTrans());
 

@@ -12,6 +12,7 @@ public:
         m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
         m_worldPos = glm::vec3(0.0f, 0.0f, 0.0f);
         m_rotateInfo = glm::vec3(0.0f, 0.0f, 0.0f);
+        //m_persProj();
     }
 
     void Scale(float ScaleX, float ScaleY, float ScaleZ)
@@ -35,18 +36,37 @@ public:
         m_rotateInfo.z = RotateZ;
     }
 
+    void SetPerspectiveProj(float FOV, float Width, float Height, float zNear, float zFar)
+    {
+        m_persProj.FOV = FOV;
+        m_persProj.Width = Width;
+        m_persProj.Height = Height;
+        m_persProj.zNear = zNear;
+        m_persProj.zFar = zFar;
+    }
+
     const glm::mat4* GetTrans();
 
 private:
     void InitScaleTransform(glm::mat4& m) const;
     void InitRotateTransform(glm::mat4& m) const;
     void InitTranslationTransform(glm::mat4& m) const;
+    void InitPerspectiveProj(glm::mat4& m) const;
 
     glm::vec3 m_scale;
     glm::vec3 m_worldPos;
     glm::vec3 m_rotateInfo;
     glm::mat4 m_transformation;
+
+    struct {
+        float FOV;
+        float Width;
+        float Height;
+        float zNear;
+        float zFar;
+    } m_persProj;
 };
+
 
 
 #endif	/* PIPELINE_H */
