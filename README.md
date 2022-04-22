@@ -3,23 +3,33 @@
 Перемещение треугольника по координате X:
 Создаём глобальную переменную gWorldLocation:
 
+```C++ 
 GLuint gWorldLocation;
+```
 
 Добавляем код шейдера:
 
-#version 330                                                                                               
-layout (location = 0) in vec3 Position;
-uniform mat4 gWorld;
-void main() {
-   gl_Position = gWorld * vec4(Position, 1.0);
-}
+```C++
+#version 330                                                                        
+                                                                                    
+layout (location = 0) in vec3 Position;                                             
+                                                                                    
+uniform mat4 gWorld;                                                                
+                                                                                    
+void main()                                                                         
+{                                                                                   
+    gl_Position = gWorld * vec4(Position, 1.0);                                     
+}";
+```
+
 
 В функцию отрисовки добавляем:
-
+```C++
 static float Scale = -1.0f; 
 Scale += 0.001f;
 
 // Подготавливаем матрицу 4x4 для изменения координаты X на значение синуса Scale
+
 glm::mat4 World;
 World[0][0] = 1.0f; World[0][1] = 0.0f; World[0][2] = 0.0f; World[0][3] = sinf(Scale);
 World[1][0] = 0.0f; World[1][1] = 1.0f; World[1][2] = 0.0f; World[1][3] = 0.0f;
@@ -27,10 +37,11 @@ World[2][0] = 0.0f; World[2][1] = 0.0f; World[2][2] = 1.0f; World[2][3] = 0.0f;
 World[3][0] = 0.0f; World[3][1] = 0.0f; World[3][2] = 0.0f; World[3][3] = 1.0f;
 
 // Загружаем данные в uniform-переменные шейдера (адрес переменной, количество матриц, передаётся ли матрица по строкам, указатель на первый элемент матрицы)
+
 glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World[0][0]);
-
+```
 Добавляем две новые функции:
-
+```C++
 static void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType) // Функция, добавляющая шейдер к программе
 {
 GLuint ShaderObj = glCreateShader(ShaderType);// Создаём шейдер
@@ -106,29 +117,29 @@ glUseProgram(ShaderProgram);
 gWorldLocation = glGetUniformLocation(ShaderProgram, "gWorld");
 assert(gWorldLocation != 0xFFFFFFFF);
 }
-
+```
 Вращение треугольника вокруг оси OZ
 
 В функции отрисовки меняем матрицу World:
-
+```C++
  World[0][0] = cosf(Scale); World[0][1] = -sinf(Scale); World[0][2] = 0.0f; World[0][3] = 0.0f;
  World[1][0] = sinf(Scale); World[1][1] = cosf(Scale);  World[1][2] = 0.0f; World[1][3] = 0.0f;
  World[2][0] = 0.0f;        World[2][1] = 0.0f;         World[2][2] = 1.0f; World[2][3] = 0.0f;
  World[3][0] = 0.0f;        World[3][1] = 0.0f;         World[3][2] = 0.0f; World[3][3] = 1.0f;
- 
+ ```
  Преобразования масштаба
  
  Как и в прошлом пункте меняем матрицу World:
- 
+```C++ 
  World[0][0] = sinf(Scale); World[0][1] = 0.0f;          World[0][2] = 0.0f;          World[0][3] = 0.0f;
 World[1][0] = 0.0f;        World[1][1] = cosf(Scale);   World[1][2] = 0.0f;          World[1][3] = 0.0f;
 World[2][0] = 0.0f;        World[2][1] = 0.0f;          World[2][2] = sinf(Scale);   World[2][3] = 0.0f;
 World[3][0] = 0.0f;        World[3][1] = 0.0f;          World[3][2] = 0.0f;          World[3][3] = 1.0f;
-
+```
 Объединение преобразований
 
 Создаем класс с пайплайном преобразований:
-
+```C++
 class Pipeline
 {
 public:
@@ -190,9 +201,9 @@ private:
         float zFar;
     } m_persProj;
 };
-
+```
 В функции отрисовки создаем объект этого класса и работаем с ним
-
+```C++
  Pipeline p;
     p.Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
     p.WorldPos(sinf(Scale), 0.0f, 0.0f);
@@ -201,7 +212,19 @@ private:
 
 
     glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, (const GLfloat*)p.GetTrans());
-    
+  ```  
 В методе GetTrans добавляем в умножение матрицу перспективы:
-
+```C++
     m_transformation = PersProjTrans * TranslationTrans * RotateTrans * ScaleTrans;
+```
+
+
+
+
+
+
+
+
+
+
+
