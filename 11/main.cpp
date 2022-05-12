@@ -50,11 +50,21 @@ static void RenderSceneCB()
     static float Scale = 0.0f;
 
     Scale += 0.001f;
-
+    //Scale += 0.1f;
     Pipeline p;
-    p.Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
+  p.Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
+   // p.Scale(0.0001, 0.0001, 0.0001);
+
     p.WorldPos(sinf(Scale), 0.0f, 0.0f);
-    p.Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
+    //p.Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
+    //p.Rotate(0.0f, Scale, 0.0f);
+    //p.WorldPos(0.0f, 0.0f, 3.0f);
+
+    glm::vec3 CameraPos(0.0f, 0.0f, -3.0f);
+    glm::vec3 CameraTarget(0.0f, 0.0f, 2.0f);
+    glm::vec3 CameraUp(0.0f, 1.0f, 0.0f);
+    p.SetCamera(CameraPos, CameraTarget, CameraUp);
+    //p.Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
     p.SetPerspectiveProj(30.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 1000.0f);
 
 

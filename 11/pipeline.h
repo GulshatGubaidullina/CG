@@ -45,13 +45,24 @@ public:
         m_persProj.zFar = zFar;
     }
 
+    void SetCamera(const glm::vec3& Pos, const glm::vec3& Target, const glm::vec3& Up)
+    {
+        m_camera.Pos = Pos;
+        m_camera.Target = Target;
+        m_camera.Up = Up;
+    }
+    void InitPersProjTransform(glm::mat4& m);
+
     const glm::mat4* GetTrans();
 
 private:
     void InitScaleTransform(glm::mat4& m) const;
     void InitRotateTransform(glm::mat4& m) const;
     void InitTranslationTransform(glm::mat4& m) const;
+    void InitTranslationTransformC(glm::mat4& m) const;
     void InitPerspectiveProj(glm::mat4& m) const;
+
+    void InitCameraTransform(glm::mat4& m) const;
 
     glm::vec3 m_scale;
     glm::vec3 m_worldPos;
@@ -65,6 +76,12 @@ private:
         float zNear;
         float zFar;
     } m_persProj;
+
+    struct {
+        glm::vec3 Pos;
+        glm::vec3 Target;
+        glm::vec3 Up;
+    } m_camera;
 };
 
 
